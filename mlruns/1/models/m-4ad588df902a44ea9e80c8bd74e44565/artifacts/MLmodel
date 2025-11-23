@@ -1,0 +1,32 @@
+artifact_path: /content/mlruns/1/models/m-4ad588df902a44ea9e80c8bd74e44565/artifacts
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.12.12
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.6.1
+is_signature_from_type_hint: false
+mlflow_version: 3.0.1
+model_id: m-4ad588df902a44ea9e80c8bd74e44565
+model_size_bytes: 10947761
+model_uuid: m-4ad588df902a44ea9e80c8bd74e44565
+prompts: null
+run_id: 0772ef29ad704cada5713c2e426240bf
+signature:
+  inputs: '[{"type": "double", "name": "Engine_RPM", "required": true}, {"type": "double",
+    "name": "Lub_Oil_Pressure", "required": true}, {"type": "double", "name": "Fuel_Pressure",
+    "required": true}, {"type": "double", "name": "Coolant_Pressure", "required":
+    true}, {"type": "double", "name": "Lub_Oil_Temperature", "required": true}, {"type":
+    "double", "name": "Coolant_Temperature", "required": true}]'
+  outputs: '[{"type": "tensor", "tensor-spec": {"dtype": "int64", "shape": [-1]}}]'
+  params: null
+type_hint_from_example: false
+utc_time_created: '2025-11-23 07:12:45.363222'

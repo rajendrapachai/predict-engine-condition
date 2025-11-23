@@ -1,0 +1,82 @@
+
+name: Predictive Maintenance ML Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  # Data Preparation (Executes prep.py)
+  data_prep:
+    runs-on: ubuntu-latest
+    env:
+      HF_TOKEN: ${{ secrets.HF_TOKEN }}
+      HF_USER: RajendrakumarPachaiappan
+      PROJECT_DIR: Predictive_Maintenance_Project
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+          
+      - name: Install Dependencies for Data Prep
+        run: |
+          pip install pandas scikit-learn joblib datasets huggingface-hub
+
+      - name: Execute Data Preparation Script (Uploads scaled data and scaler)
+        run: python ${{ env.PROJECT_DIR }}/src/prep.py
+        
+  # Model Training and Registration (Executes train.py)
+  train_and_register:
+    needs: data_prep 
+    runs-on: ubuntu-latest
+    env:
+      HF_TOKEN: ${{ secrets.HF_TOKEN }}
+      HF_USER: RajendrakumarPachaiappan
+      PROJECT_DIR: Predictive_Maintenance_Project
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+          
+      - name: Install Dependencies for Training
+        run: |
+          pip install pandas scikit-learn joblib numpy huggingface-hub Jinja2 xgboost
+
+      - name: Execute Model Training Script (Downloads data, trains, registers model)
+        run: python ${{ env.PROJECT_DIR }}/src/train.py
+        
+  # Model Deployment (Executes hosting.py to push to HF Space)
+
+  deploy:
+    needs: train_and_register
+    runs-on: ubuntu-latest
+    env:
+      HF_TOKEN: ${{ secrets.HF_TOKEN }}
+      PROJECT_DIR: Predictive_Maintenance_Project
+      HF_SPACE_ID: RajendrakumarPachaiappan/EnginePredictionModel 
+      
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+          
+      - name: Install Deployment Dependencies
+        run: |
+          pip install huggingface-hub 
+
+      - name: Execute Deployment Script (Uploads deployment folder to HF Space)
+        run: python ${{ env.PROJECT_DIR }}/deployment/hosting.py
