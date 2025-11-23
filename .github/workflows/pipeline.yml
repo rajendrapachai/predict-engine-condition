@@ -55,7 +55,7 @@ jobs:
       - name: Execute Model Training Script (Downloads data, trains, registers model)
         run: python ${{ env.PROJECT_DIR }}/src/train.py
         
-  # Model Deployment (Executes hosting.py to push to HF Space)
+  # Model Deployment (Executes hosting.py to push to Hugging Face Space)
 
   deploy:
     needs: train_and_register
